@@ -29,7 +29,7 @@ def settings(BASE_DIR=os.getcwd()):
     # See: https://docs.djangoproject.com/en/dev/ref/settings/#debug
     DEBUG = env.bool('DJANGO_DEBUG', False)
 
-    ALLOWED_HOSTS = env('DJANGO_ALLOWED_HOSTS', default=['localhost'])
+    ALLOWED_HOSTS = env('DJANGO_ALLOWED_HOSTS', default=['.localhost'])
 
     # Sentry
     sentry_sdk.init(
@@ -58,10 +58,10 @@ def settings(BASE_DIR=os.getcwd()):
     # Database
     # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
     protocol = env('DJANGO_DB_ENGINE', default='postgres')
-    db = env('DJANGO_DATABASE_NAME', default='')
-    user = env('DJANGO_DATABASE_USER', default='')
+    db = env('DJANGO_DATABASE_NAME', default='postgres')
+    user = env('DJANGO_DATABASE_USER', default='postgres')
     host = env('DJANGO_DB_HOST', default='postgres')
-    password = env('DJANGO_DATABASE_PASSWORD', default='')
+    password = env('DJANGO_DATABASE_PASSWORD', default='postgres')
     port = env('DJANGO_DATABASE_PORT', default=5432)
 
     DATABASES = {
