@@ -23,6 +23,7 @@ jobs:
     - name: Publish
       uses: ncipollo/release-action@v1
       with:
+        allowUpdates: true
         artifacts: "dist/*tar.gz,dist/*.zip"
         tag: python setup.py --version
         token: ${{ secrets.GITHUB_TOKEN }}
