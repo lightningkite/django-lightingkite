@@ -15,9 +15,9 @@ a common package for lightningkite projects
 Run the following commands:
 http
 ```bash
-pip install git+https://github.com/lightningkite.com/django-lightingkite
+pip install git+https://github.com/lightningkite/django-lightningkite
                                 or
-pip install git+ssh://github.com/lightningkite.com/django-lightingkite
+pip install git+ssh://github.com/lightningkite/django-lightningkite
 ```
 
 import base settings
