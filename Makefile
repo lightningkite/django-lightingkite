@@ -37,7 +37,7 @@ build-image:
 	docker build -t lightningkite/django-lightningkite .
 
 build:
-	python setup.py sdist
+	python setup.py sdist --formats=gztar,zip
 
 build-docker: build-image
 	docker run --rm -v $(shell pwd):/code lightningkite/django-lightningkite

@@ -1,13 +1,13 @@
 from django.apps import AppConfig
 
-version = (0, 0, 0)
-
 __title__ = 'django_lightningkite'
-__version__ = '.'.join(map(str, version))
+__version__ = '0.0.0'
 __author__ = 'lightningkite'
 __license__ = 'tba'
 __copyright__ = 'Copyright 2020 lightningkite'
 
+# Version synonym
+VERSION = __version__
 
 # default_app_config = "django_lightningkite.DjangoLightingkiteConfig"
 
