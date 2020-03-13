@@ -1,4 +1,3 @@
-from django.apps import AppConfig
 
 __title__ = 'django_lightningkite'
 __version__ = '0.0.0'
