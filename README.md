@@ -2,9 +2,9 @@ django-lightningkite
 ==============
 a common package for lightningkite projects
 
-<!-- **Document contents**
-
-- [Installation](#installation) -->
+**index**
+- [Users](docs/users.md)
+- [Installation](#installation)
 
 # Installation
 

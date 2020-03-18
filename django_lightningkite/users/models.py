@@ -34,9 +34,10 @@ class AbstractEmailUser(AbstractBaseUser, PermissionsMixin):
 
     EMAIL_FIELD = 'email'
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['email']
+    REQUIRED_FIELDS = []
 
     class Meta:
+        abstract = True
         verbose_name = _('user')
         verbose_name_plural = _('users')
 
