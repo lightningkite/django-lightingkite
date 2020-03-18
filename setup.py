@@ -14,6 +14,7 @@ def get_version(package):
     init_py = open(os.path.join(package, '__init__.py')).read()
     return re.search("__version__ = ['\"]([^'\"]+)['\"]", init_py).group(1)
 
+
 setup(
     version=get_version('django_lightningkite'),
     install_requires=[
