@@ -4,6 +4,7 @@ a common package for lightningkite projects
 
 **index**
 - [Users](docs/users.md)
+- [docs](docs/docs.md)
 - [Installation](#installation)
 
 # Installation
