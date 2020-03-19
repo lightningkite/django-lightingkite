@@ -5,6 +5,7 @@ a common package for lightningkite projects
 **index**
 - [Users](docs/users.md)
 - [docs](docs/docs.md)
+- [stripe](docs/stripe.md)
 - [Installation](#installation)
 
 # Installation
