@@ -5,6 +5,7 @@ from sentry_sdk.integrations.django import DjangoIntegration
 
 env = environ.Env()
 
+
 def settings(BASE_DIR=os.getcwd()):
     # Load operating system environment variables and then prepare to use them
     READ_DOT_ENV_FILE = env.bool('DJANGO_READ_DOT_ENV_FILE', default=True)
@@ -12,12 +13,12 @@ def settings(BASE_DIR=os.getcwd()):
         # Operating System Environment variables have precedence over variables defined in the .env file,
         # that is to say variables from the .env files will only be used if not defined
         # as environment variables.
-        env_file = os.path.join(BASE_DIR,'.env')
+        env_file = os.path.join(BASE_DIR, '.env')
         env.read_env(env_file)
-        print('The .env file has been loaded. See django-lightingkite/settings.py for more information')
 
     if env("DJANGO_SECRET_KEY") is None:
-        raise Exception('DJANGO_SECRET_KEY must be defined in Environment or .env file')
+        raise Exception(
+            'DJANGO_SECRET_KEY must be defined in Environment or .env file')
 
     # SECRET CONFIGURATION
     # ------------------------------------------------------------------------------
@@ -77,6 +78,7 @@ def settings(BASE_DIR=os.getcwd()):
 
     # Static files (CSS, JavaScript, Images)
     # https://docs.djangoproject.com/en/2.0/howto/static-files/
+    STATIC_ROOT = env('DJANGO_STATIC_ROOT', default=os.path.join(BASE_DIR, 'static'))
     STATIC_URL = env('DJANGO_STATIC_URL', default='/static/')
 
     # Email
@@ -86,7 +88,6 @@ def settings(BASE_DIR=os.getcwd()):
     EMAIL_PORT = env.int('EMAIL_PORT', default=1025)
     EMAIL_BACKEND = env('DJANGO_EMAIL_BACKEND',
                         default='django.core.mail.backends.console.EmailBackend')
-
 
     # Template loading
     TEMPLATES = [
