@@ -23,11 +23,11 @@ to_<thing> method should return our message for the channel to send.
 - failed
 
 ### queueing
- . drivers
+ - drivers
     - django Q
     - celery
     - django db ???
- . features
+ - features
     - Throttling
     - Scheduling
     - Retrys
