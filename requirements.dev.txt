@@ -11,6 +11,7 @@ pyyaml>=5,<6
 # dev
 pytest
 pytest-django
+coverage
 ipdb
 tox
 autopep8

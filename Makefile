@@ -55,9 +55,9 @@ test-docker: build-image
 	docker run --rm -v $(shell pwd):/code lightningkite/django-lightningkite python setup.py test
 
 coverage:
-	coverage run --source django_extensions setup.py test
+	coverage run  --source=django_lightningkite -m pytest
 	coverage report -m
-	coverage html
+	# coverage html
 
 venv:
 	python3 -m  venv env
