@@ -12,7 +12,7 @@ help:
 	@echo "install - install the package to the active Python's site-packages"
 	@echo "docker - spin up docker environment"
 
-clean: clean-test clean-build clean-pyc clean-
+clean: clean-test clean-build clean-pyc clean-docker
 
 clean-build:
 	rm -fr build/

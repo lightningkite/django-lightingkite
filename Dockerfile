@@ -27,7 +27,7 @@ RUN set -ex \
 
 # install base python deps
 USER python
-COPY --chown=python:python requirements.txt $APP_DIR/requirements.dev.txt
+COPY --chown=python:python requirements.dev.txt $APP_DIR/requirements.dev.txt
 RUN set -ex &&  /env/bin/pip install -r $APP_DIR/requirements.dev.txt
 
 WORKDIR $APP_DIR
