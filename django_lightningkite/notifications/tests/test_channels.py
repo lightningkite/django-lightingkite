@@ -1,21 +1,48 @@
 from django.test import TestCase
 
-from django_lightningkite.notifications.Notification import Notification
+from ..notification import Notification
 # from django_lightningkite.notifications.models import Notification
-from django_lightningkite.notifications.channels import ConsoleChannel
+from ..channels import ConsoleChannel
+
+from django.conf import settings
+
+
+# we need to put this somewhere better.
+settings.configure(DEBUG=True,
+                   DATABASES={
+                       'default': {
+                           'ENGINE': 'django.db.backends.sqlite3',
+                       }
+                   },
+                   INSTALLED_APPS=('django.contrib.auth',
+                                   'django.contrib.contenttypes',
+                                   'django.contrib.sessions',
+                                   'django.contrib.admin',
+                                   'django_lightningkite.notifications',))
+
+
+def test_foo():
+    """
+    example of non django (pytest) test.
+    delete me.
+    """
+    assert 3 == 3
+
 
 class ConsoleNotification(Notification):
-    def via(notifiable):
-        return ['ConsoleChannel', ConsoleChannel.__class__]
-    def to_console(notifiable):
-        return "hello {}".format(notifiable.name)
+    def via(self, notifiable):
+        return ['ConsoleChannel', ConsoleChannel]
+
+    def to_console(self, notifiable):
+        return "hello world"
+
 
 class ConsoleTests(TestCase):
-    # what is the difference between the model in the database and the notification class? 
+
+    # what is the difference between the model in the database and the notification class?
     def setUp(self):
         self.console_notification = ConsoleNotification()
-        self.console_notification.send()
-    
+
     def test_send_to_console(self):
-        pass
-        # make your instance of the channel and then fire of its send function....? 
+        self.console_notification.send(None)
+        # we could use the signal to make sure it sent :o

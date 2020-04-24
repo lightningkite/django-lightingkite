@@ -1,4 +1,5 @@
-from .Channel import Channel
+from .channel import Channel
+import sys
 
 
 class ConsoleChannel(Channel):
@@ -12,7 +13,6 @@ class ConsoleChannel(Channel):
         """
         This class is going to be designed to just throw a notification into the console; this is primarily for testing
         """
-        message = notifiable.to_console(notifiable)
-        print(notification)
-
-
+        # TODO make thread safe: https://github.com/django/django/blob/master/django/core/mail/backends/console.py
+        message = notification.to_console(notifiable)
+        sys.stdout.write('{}\n'.format(message))

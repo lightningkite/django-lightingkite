@@ -1,6 +1,7 @@
-from .Channel import Channel
+from .channel import Channel
 
-class MailChannel(Channel):
+
+class DatabaseChannel(Channel):
 
     def send(notifiable, notification):
         """

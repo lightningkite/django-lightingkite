@@ -1,6 +1,6 @@
 from django.core.mail import EmailMessage
 
-from .Channel import Channel
+from .channel import Channel
 
 
 class MailChannel(Channel):
@@ -13,9 +13,7 @@ class MailChannel(Channel):
         message = notification.to_mail(notifiable)
 
         if isinstance(message, EmailMessage):
-            if hasattr(notification, 'fail_silently')
+            if (hasattr(notification, 'fail_silently')):
                 message.send(notifiable.fail_silently)
-            else
+            else:
                 message.send()
-
-

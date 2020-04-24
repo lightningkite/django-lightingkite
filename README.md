@@ -7,6 +7,7 @@ a common package for lightningkite projects
 - [docs](docs/docs.md)
 - [stripe](docs/stripe.md)
 - [Installation](#installation)
+- [Contribution](CONTRIBUTING.md)
 
 # Installation
 

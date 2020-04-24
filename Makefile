@@ -59,5 +59,8 @@ coverage:
 	coverage report -m
 	coverage html
 
+venv:
+	python3 -m  venv env
+
 install: clean
 	python setup.py install
