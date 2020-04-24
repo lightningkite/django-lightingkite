@@ -6,6 +6,7 @@ from ..channels import ConsoleChannel
 
 from django.conf import settings
 
+from ..signals import sending, sent, success
 
 # we need to put this somewhere better.
 settings.configure(DEBUG=True,
@@ -21,14 +22,6 @@ settings.configure(DEBUG=True,
                                    'django_lightningkite.notifications',))
 
 
-def test_foo():
-    """
-    example of non django (pytest) test.
-    delete me.
-    """
-    assert 3 == 3
-
-
 class ConsoleNotification(Notification):
     def via(self, notifiable):
         return ['ConsoleChannel', ConsoleChannel]
@@ -39,10 +32,21 @@ class ConsoleNotification(Notification):
 
 class ConsoleTests(TestCase):
 
-    # what is the difference between the model in the database and the notification class?
     def setUp(self):
         self.console_notification = ConsoleNotification()
 
     def test_send_to_console(self):
+        sending.connect(self.signal_sending, sender=ConsoleChannel)
+        sent.connect(self.signal_sent, sender=ConsoleChannel)
         self.console_notification.send(None)
-        # we could use the signal to make sure it sent :o
+
+    def signal_sending(self, sender, **kwargs):
+        self.assertIsNone(kwargs.get('notifiable'))
+        self.assertIs(self.console_notification, kwargs.get('notification'))
+    
+    def signal_sent(self, sender, **kwargs):
+        import pdb; pdb.set_trace()
+        self.assertIsNone(kwargs.get('notifiable'))
+        self.assertIs(self.console_notification, kwargs.get('notification'))
+        self.assertEqual(kwargs.get('message'), 'hello world')
+

@@ -46,13 +46,13 @@ build-docker: build-image
 	docker run --rm -v $(shell pwd):/code lightningkite/django-lightningkite
 
 shell: build-image
-	docker run --rm -it -v $(shell pwd):/code lightningkite/django-lightningkite bash 
+	docker run --rm -it -v $(shell pwd):/code lightningkite/django-lightningkite bash
 
 test:
-	python setup.py test
+	pytest
 
 test-docker: build-image
-	docker run --rm -v $(shell pwd):/code lightningkite/django-lightningkite python setup.py test
+	docker run --rm -v $(shell pwd):/code lightningkite/django-lightningkite pytest
 
 coverage:
 	coverage run  --source=django_lightningkite -m pytest
