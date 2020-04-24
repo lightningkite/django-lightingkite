@@ -2,11 +2,14 @@ from django.test import TestCase
 
 from ..notification import Notification
 # from django_lightningkite.notifications.models import Notification
-from ..channels import ConsoleChannel
+from ..channels import ConsoleChannel, MailChannel
 
 from django.conf import settings
 
-from ..signals import sending, sent, success
+from ..signals import sending, sent
+
+from django.core.mail import EmailMessage
+
 
 # we need to put this somewhere better.
 settings.configure(DEBUG=True,
@@ -24,7 +27,7 @@ settings.configure(DEBUG=True,
 
 class ConsoleNotification(Notification):
     def via(self, notifiable):
-        return ['ConsoleChannel', ConsoleChannel]
+        return ['ConsoleChannel', ConsoleChannel ]
 
     def to_console(self, notifiable):
         return "hello world"
@@ -45,8 +48,40 @@ class ConsoleTests(TestCase):
         self.assertIs(self.console_notification, kwargs.get('notification'))
     
     def signal_sent(self, sender, **kwargs):
-        import pdb; pdb.set_trace()
         self.assertIsNone(kwargs.get('notifiable'))
         self.assertIs(self.console_notification, kwargs.get('notification'))
         self.assertEqual(kwargs.get('message'), 'hello world')
+    
 
+class EmailNotification(Notification):
+    def via(self, notifiable):
+        return ['MailChannel']
+    
+    def to_mail(self, notifiable):
+        # return an email object class
+        return EmailMessage(
+            'Hello',
+            'This is an email',
+            'from@fromlightningkite.com',
+            ['to@tolightningkite.com']
+        )
+    
+class EmailTests(TestCase):
+    def setUp(self):
+        self.email_notification = EmailNotification()
+
+    def test_send_email(self):
+        sending.connect(self.signal_sending, sender=MailChannel)
+        sent.connect(self.signal_sent, sender=MailChannel)
+        # Notifiable will be specified by the user of the library, in our case we don't need one
+        self.email_notification.send(None)
+    
+    def signal_sending(self, sender, **kwargs):
+        self.assertIsNone(kwargs.get('notifiable'))
+        self.assertIs(self.email_notification, kwargs.get('notification'))
+    
+    def signal_sent(self, sender, **kwargs):
+        self.assertIsNone(kwargs.get('notifiable'))
+        self.assertIs(self.email_notification, kwargs.get('notification'))
+        self.assertEqual(kwargs.get('message').body, 'This is an email')
+    

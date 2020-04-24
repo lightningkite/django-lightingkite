@@ -1,6 +1,7 @@
 from .channel import Channel
 import sys
-from ..signals import sending, sent, success
+from ..signals import sending, sent
+from .. import SUCCESS, FAILED
 
 
 class ConsoleChannel(Channel):
@@ -18,5 +19,4 @@ class ConsoleChannel(Channel):
         # TODO make thread safe: https://github.com/django/django/blob/master/django/core/mail/backends/console.py
         message = notification.to_console(notifiable)
         sys.stdout.write('{}\n'.format(message))
-        sent.send(sender=ConsoleChannel, notifiable=notifiable, notification=notification, message=message)
-        success.send(sender=ConsoleChannel, notifiable=notifiable, notification=notification, message=message)
+        sent.send(sender=ConsoleChannel, notifiable=notifiable, notification=notification, message=message, status=SUCCESS)

@@ -7,4 +7,9 @@ class DatabaseChannel(Channel):
         """
         Send the Given Notifiction
         """
-        pass
+        message = notification.to_db(notifiable, notification)
+
+
+        # specify a model that they're going to create and that model's arguments
+
+
