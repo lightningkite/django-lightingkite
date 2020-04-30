@@ -1,5 +1,7 @@
 from .channel import Channel
 from twilio.rest import Client
+from ... import settings
+
 
 class TwilioChannel(Channel):
 
@@ -8,7 +10,6 @@ class TwilioChannel(Channel):
         Send the Given Notifiction
 
         questions:
-        - will we want to use the twilio rest api?
         - how generic will this be? do we need to include being able to text images and such? 
         
         items of interest:
@@ -24,13 +25,9 @@ class TwilioChannel(Channel):
 
         client = Client(settings.TWILIO_SID, settings.TWILIO_TOKEN)
 
-        message_kwargs = notification.to_sms()
+        text_message = notification.to_sms()
 
-        '''
-            the message kwargs need the following arguments 
-            - body
-            - from_
-            - to
-        '''
+        message_kwargs = text_message.get_kwargs()
+
         message = client.messages.create(message_kwargs)
 

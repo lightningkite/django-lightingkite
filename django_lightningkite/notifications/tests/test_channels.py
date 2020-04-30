@@ -4,6 +4,10 @@ from ..notification import Notification
 # from django_lightningkite.notifications.models import Notification
 from ..channels import ConsoleChannel, MailChannel
 
+from ..channels.twilio_channel import twilio_channel
+from ..channels.twilio_channel.text_message import TextMessage
+from ..settings import settings
+
 from django.conf import settings
 
 from ..signals import sending, sent
@@ -85,3 +89,25 @@ class EmailTests(TestCase):
         self.assertIsNone(kwargs.get('notifiable'))
         self.assertIs(self.email_notification, kwargs.get('notification'))
         self.assertEqual(kwargs.get('message').body, 'This is an email')
+
+
+class TextNotification(Notification):
+    def via(self, notifiable):
+        return ['TwilioChannel']
+
+    def to_sms(self, notifiable):
+        text_message = TextMessage(
+            "welcome to lightningkite",
+            "8014588571",
+            "(251) 299-8145"
+
+        )
+        return text_message
+
+    
+class TwilioTests(TestCase):
+    def setUp(self):
+        self.text_notification = TextNotification()
+
+    def test_send_text(self)
+        self.text_notification.send(None)
