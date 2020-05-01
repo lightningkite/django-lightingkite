@@ -60,7 +60,7 @@ coverage:
 	# coverage html
 
 venv:
-	python3 -m  venv env
+	python3 -m  venv .venv
 
 install: clean
 	python setup.py install

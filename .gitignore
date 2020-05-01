@@ -78,6 +78,7 @@ dist
 docs/_build
 docs/_static
 venv*
+.venv
 .tox
 *.bak
 .DS_Store
