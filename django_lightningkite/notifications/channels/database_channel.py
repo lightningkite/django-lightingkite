@@ -1,5 +1,6 @@
 from .channel import Channel
 from django.db import models
+from ..signals import sending, sent
 
 
 class DatabaseChannel(Channel):
@@ -8,7 +9,14 @@ class DatabaseChannel(Channel):
         """
         Send the Given Notifiction
         """
+
         message = notification.to_db(notifiable)
 
+
         if isinstance(message, models.Model):
-            message.save()
+            sending.send(sender=DatabaseChannel, notifiable=notifiable, notification=notification)
+            try:
+                message.save()
+                sent.send(sender=DatabaseChannel, notifiable=notifiable, notification=notification)
+            except Exception as e:
+                raise e

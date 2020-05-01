@@ -84,11 +84,11 @@ class AbstractNotification(models.Model):
         current timestamp.
         """
         from django.utils.timesince import timesince as timesince_
-        return timesince_(self.timestamp, now)
+        return timesince_(self.created_at, now)
 
     class Meta:
         abstract = True
-        ordering = ('-timestamp',)
+        ordering = ('-created_at',)
 
 
 class Notification(AbstractNotification):

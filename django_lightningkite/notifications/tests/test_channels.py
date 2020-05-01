@@ -3,13 +3,12 @@ from django.conf import settings
 from django.core.mail import EmailMessage
 from django.test import TestCase
 
+from datetime import datetime
+
 from ..notification import Notification
 from ..signals import sending, sent
-from ..channels.mail_channel import MailChannel
-from ..channels.console_channel import ConsoleChannel
-from ..channels.database_channel import DatabaseChannel
 
-from ..models import Notification as NotificationModel
+import django
 
 # we need to put this somewhere better.
 settings_param = dl_settings()
@@ -19,9 +18,22 @@ settings_param.update({
             'ENGINE': 'django.db.backends.sqlite3',
         }
     },
+    'INSTALLED_APPS': {
+        'django.contrib.auth',
+        'django.contrib.contenttypes',
+        'django.contrib.sessions',
+        'django.contrib.admin',
+        'django_lightningkite.notifications',
+    }
 })
-settings.configure(**settings_param)
 
+settings.configure(**settings_param)
+django.setup()
+
+from ..models import Notification as NotificationModel
+from ..channels.mail_channel import MailChannel
+from ..channels.console_channel import ConsoleChannel
+from ..channels.database_channel import DatabaseChannel
 
 class ConsoleNotification(Notification):
     def via(self, notifiable):
@@ -91,26 +103,43 @@ class DBNotification(Notification):
 
     def to_db(self, notifiable):
         # create an instance of the model Notification, but do not save it
-        # return NotificationModel(
-
-        # )
-        pass
+        from django.contrib.contenttypes.models import ContentType
+        from django.contrib.auth.models import User
+        content_type = ContentType.objects.get(model='user')
+        return NotificationModel(
+            recipient=User.objects.first(),
+            actor_content_type=content_type,
+            actor_object_id=notifiable.id,
+            verb="notified",
+        )
 
 
 class DBTests(TestCase):
     def setUp(self):
-        self.db_notification = DBNotification()
+        from django.contrib.auth.models import User
+        self.db_notification = DBNotification(
+
+        )
+        self.first_user = User.objects.create(
+            first_name="first",
+            username="first_user"
+        )
+        self.second_user = User.objects.create(
+            first_name="second",
+            username="second_user"
+        )
 
     def test_db_notify(self):
         sending.connect(self.signal_sending, sender=DatabaseChannel)
         sent.connect(self.signal_sent, sender=DatabaseChannel)
-        self.db_notification.send(None)
+        self.db_notification.send(self.second_user)
 
     def signal_sending(self, sender, **kwargs):
-        pass
+        import ipdb; ipdb.set_trace()
+        self.assertFalse(NotificationModel.objects.exists())
 
     def signal_sent(self, sender, **kwargs):
-        pass
+        self.assertTrue(NotificationModel.objects.exists())
 
 
 # class TwilioTests(TestCase):
