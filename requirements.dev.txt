@@ -16,4 +16,5 @@ ipdb
 tox
 autopep8
 flake8
+twilio>=6.34.0
 
