@@ -13,8 +13,8 @@ def settings(BASE_DIR=os.getcwd()):
         # Operating System Environment variables have precedence over variables defined in the .env file,
         # that is to say variables from the .env files will only be used if not defined
         # as environment variables.
-        env_file = os.path.join(BASE_DIR, '.env')
-        env.read_env(env_file)
+        ENV_FILE = os.path.join(BASE_DIR, '.env')
+        env.read_env(ENV_FILE)
 
     if env("DJANGO_SECRET_KEY") is None:
         raise Exception(

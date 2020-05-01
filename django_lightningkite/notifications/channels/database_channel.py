@@ -1,4 +1,5 @@
 from .channel import Channel
+from django.db import models
 
 
 class DatabaseChannel(Channel):
@@ -7,9 +8,7 @@ class DatabaseChannel(Channel):
         """
         Send the Given Notifiction
         """
-        message = notification.to_db(notifiable, notification)
+        message = notification.to_db(notifiable)
 
-
-        # specify a model that they're going to create and that model's arguments
-
-
+        if isinstance(message, models.Model):
+            message.save()

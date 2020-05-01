@@ -1,32 +1,26 @@
+from django_lightningkite.settings import settings as dl_settings
+from django.conf import settings
+from django.core.mail import EmailMessage
 from django.test import TestCase
 
 from ..notification import Notification
-# from django_lightningkite.notifications.models import Notification
-from ..channels import ConsoleChannel, MailChannel
-
-from ..channels.twilio_channel import twilio_channel
-from ..channels.twilio_channel.text_message import TextMessage
-from ..settings import settings
-
-from django.conf import settings
-
 from ..signals import sending, sent
+from ..channels.mail_channel import MailChannel
+from ..channels.console_channel import ConsoleChannel
+from ..channels.database_channel import DatabaseChannel
 
-from django.core.mail import EmailMessage
-
+from ..models import Notification as NotificationModel
 
 # we need to put this somewhere better.
-settings.configure(DEBUG=True,
-                   DATABASES={
-                       'default': {
-                           'ENGINE': 'django.db.backends.sqlite3',
-                       }
-                   },
-                   INSTALLED_APPS=('django.contrib.auth',
-                                   'django.contrib.contenttypes',
-                                   'django.contrib.sessions',
-                                   'django.contrib.admin',
-                                   'django_lightningkite.notifications',))
+settings_param = dl_settings()
+settings_param.update({
+    'DATABASES': {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+        }
+    },
+})
+settings.configure(**settings_param)
 
 
 class ConsoleNotification(Notification):
@@ -91,23 +85,50 @@ class EmailTests(TestCase):
         self.assertEqual(kwargs.get('message').body, 'This is an email')
 
 
-class TextNotification(Notification):
+class DBNotification(Notification):
     def via(self, notifiable):
-        return ['TwilioChannel']
+        return ['DatabaseChannel']
 
-    def to_sms(self, notifiable):
-        text_message = TextMessage(
-            "welcome to lightningkite",
-            "8014588571",
-            "(251) 299-8145"
+    def to_db(self, notifiable):
+        # create an instance of the model Notification, but do not save it
+        # return NotificationModel(
 
-        )
-        return text_message
+        # )
+        pass
 
-    
-class TwilioTests(TestCase):
+
+class DBTests(TestCase):
     def setUp(self):
-        self.text_notification = TextNotification()
+        self.db_notification = DBNotification()
 
-    def test_send_text(self)
-        self.text_notification.send(None)
+    def test_db_notify(self):
+        sending.connect(self.signal_sending, sender=DatabaseChannel)
+        sent.connect(self.signal_sent, sender=DatabaseChannel)
+        self.db_notification.send(None)
+
+    def signal_sending(self, sender, **kwargs):
+        pass
+
+    def signal_sent(self, sender, **kwargs):
+        pass
+
+
+# class TwilioTests(TestCase):
+#     def setUp(self):
+#         from ..channels.twilio_channel.text_message import TextMessage
+#         from ..channels import TwilioChannel
+
+#         class TextNotification(Notification):
+#             def via(self, notifiable):
+#                 return ['TwilioChannel']
+
+#             def to_sms(self, notifiable):
+#                 text_message = TextMessage(
+#                     body="welcome to lightningkite",
+#                 )
+#                 return text_message
+
+#         self.text_notification = TextNotification()
+
+#     def test_send_text(self):
+#         self.text_notification.send(None)
