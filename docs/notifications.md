@@ -1,6 +1,6 @@
 # introduction
 
-A notification library for sending notifications across a variety of deleivery channels.
+A notification library for sending notifications across a variety of delivery channels.
 
 
 ## implement a notification.
