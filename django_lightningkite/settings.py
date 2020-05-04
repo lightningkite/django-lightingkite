@@ -30,6 +30,9 @@ def settings(BASE_DIR=os.getcwd()):
     # See: https://docs.djangoproject.com/en/dev/ref/settings/#debug
     DEBUG = env.bool('DJANGO_DEBUG', False)
 
+    # ENVIRONMENT (staging, dev, production etc..)
+    ENVIRONMENT = env('DJANGO_ENVIRONMENT', default='production')
+
     ALLOWED_HOSTS = env('DJANGO_ALLOWED_HOSTS', default=['.localhost'])
 
     # Sentry
@@ -74,7 +77,7 @@ def settings(BASE_DIR=os.getcwd()):
     LANGUAGE_CODE = 'en-us'
     TIME_ZONE = 'UTC'
     USE_L10N = True
-    USE_TZ = False
+    USE_TZ = True
 
     # Static files (CSS, JavaScript, Images)
     # https://docs.djangoproject.com/en/2.0/howto/static-files/
