@@ -57,6 +57,7 @@ node_modules/
 
 # virtual environments
 .env
+env
 
 # User-uploaded media
 lifting_generations/media/
@@ -77,6 +78,7 @@ dist
 docs/_build
 docs/_static
 venv*
+.venv
 .tox
 *.bak
 .DS_Store

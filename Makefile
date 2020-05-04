@@ -12,7 +12,7 @@ help:
 	@echo "install - install the package to the active Python's site-packages"
 	@echo "docker - spin up docker environment"
 
-clean: clean-test clean-build clean-pyc
+clean: clean-test clean-build clean-pyc clean-docker
 
 clean-build:
 	rm -fr build/
@@ -33,6 +33,9 @@ clean-test:
 	rm -f .coverage
 	rm -fr htmlcov/
 
+clean-docker:
+	docker rmi lightningkite/django-lightningkite
+
 build-image:
 	docker build -t lightningkite/django-lightningkite .
 
@@ -43,15 +46,21 @@ build-docker: build-image
 	docker run --rm -v $(shell pwd):/code lightningkite/django-lightningkite
 
 shell: build-image
-	docker run --rm -it -v $(shell pwd):/code lightningkite/django-lightningkite bash 
+	docker run --rm -it -v $(shell pwd):/code lightningkite/django-lightningkite bash
 
 test:
-	python setup.py test
+	pytest
+
+test-docker: build-image
+	docker run --rm -v $(shell pwd):/code lightningkite/django-lightningkite pytest
 
 coverage:
-	coverage run --source django_extensions setup.py test
+	coverage run  --source=django_lightningkite -m pytest
 	coverage report -m
-	coverage html
+	# coverage html
+
+venv:
+	python3 -m  venv .venv
 
 install: clean
 	python setup.py install
