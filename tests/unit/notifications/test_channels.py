@@ -1,39 +1,18 @@
-from django_lightningkite.settings import settings as dl_settings
-from django.conf import settings
+import os
+
+import django
 from django.core.mail import EmailMessage
 from django.test import TestCase
 
-from datetime import datetime
+from django_lightningkite.notifications import Notification
+from django_lightningkite.notifications.signals import sending, sent
 
-from ..notification import Notification
-from ..signals import sending, sent
-
-import django
-
-# we need to put this somewhere better.
-settings_param = dl_settings()
-settings_param.update({
-    'DATABASES': {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-        }
-    },
-    'INSTALLED_APPS': {
-        'django.contrib.auth',
-        'django.contrib.contenttypes',
-        'django.contrib.sessions',
-        'django.contrib.admin',
-        'django_lightningkite.notifications',
-    }
-})
-
-settings.configure(**settings_param)
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'tests.unit.settings')
 django.setup()
 
-from ..models import Notification as NotificationModel
-from ..channels.mail_channel import MailChannel
-from ..channels.console_channel import ConsoleChannel
-from ..channels.database_channel import DatabaseChannel
+from django_lightningkite.notifications.models import Notification as NotificationModel
+from django_lightningkite.notifications.channels import ConsoleChannel, DatabaseChannel, MailChannel
+
 
 class ConsoleNotification(Notification):
     def via(self, notifiable):
@@ -135,29 +114,7 @@ class DBTests(TestCase):
         self.db_notification.send(self.second_user)
 
     def signal_sending(self, sender, **kwargs):
-        import ipdb; ipdb.set_trace()
         self.assertFalse(NotificationModel.objects.exists())
 
     def signal_sent(self, sender, **kwargs):
         self.assertTrue(NotificationModel.objects.exists())
-
-
-# class TwilioTests(TestCase):
-#     def setUp(self):
-#         from ..channels.twilio_channel.text_message import TextMessage
-#         from ..channels import TwilioChannel
-
-#         class TextNotification(Notification):
-#             def via(self, notifiable):
-#                 return ['TwilioChannel']
-
-#             def to_sms(self, notifiable):
-#                 text_message = TextMessage(
-#                     body="welcome to lightningkite",
-#                 )
-#                 return text_message
-
-#         self.text_notification = TextNotification()
-
-#     def test_send_text(self):
-#         self.text_notification.send(None)
