@@ -28,8 +28,8 @@ setup(
             "pyyaml>=5,<6",
         ],
         "s3": [
-            "django-storages>=1.9,<1.10"
-            "boto3>=1.4.4,<1.14"
+            "django-storages>=1.9,<1.10",
+            "boto3>=1.4.4,<1.14",
         ]
     }
 )
