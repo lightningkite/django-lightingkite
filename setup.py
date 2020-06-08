@@ -22,4 +22,14 @@ setup(
         "django-environ>=0.4.5,<1.0.0",
         "sentry-sdk>=0.13.0,<1.0.0",
     ],
+    extras_require={
+        "docs": [
+            "uritemplate>=3,<4",
+            "pyyaml>=5,<6",
+        ],
+        "s3": [
+            "django-storages>=1.9,<1.10"
+            "boto3>=1.4.4,<1.14"
+        ]
+    }
 )

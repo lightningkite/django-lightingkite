@@ -79,11 +79,6 @@ def settings(BASE_DIR=os.getcwd()):
     USE_L10N = True
     USE_TZ = True
 
-    # Static files (CSS, JavaScript, Images)
-    # https://docs.djangoproject.com/en/2.0/howto/static-files/
-    STATIC_ROOT = env('DJANGO_STATIC_ROOT', default=os.path.join(BASE_DIR, 'static'))
-    STATIC_URL = env('DJANGO_STATIC_URL', default='/static/')
-
     # Email
     EMAIL_HOST = env('EMAIL_HOST', default='localhost')
     EMAIL_HOST_USER = env('EMAIL_HOST_USER', default=None)
@@ -108,4 +103,55 @@ def settings(BASE_DIR=os.getcwd()):
             },
         },
     ]
+
+    # AWS
+    AWS_ACCESS_KEY_ID = env('DJANGO_AWS_ACCESS_KEY_ID', default=None)
+    AWS_SECRET_ACCESS_KEY = env('DJANGO_AWS_SECRET_ACCESS_KEY', default=None)
+    AWS_STORAGE_BUCKET_NAME = env('DJANGO_AWS_STORAGE_BUCKET_NAME', default=None)
+    AWS_AUTO_CREATE_BUCKET = env.bool('DJANGO_AWS_AUTO_CREATE_BUCKET', True)
+    AWS_QUERYSTRING_AUTH = env.bool('DJANGO_AWS_QUERYSTRING_AUTH', False)
+    AWS_IS_GZIPPED = env.bool('DJANGO_AWS_IS_GZIPPED', True)
+    GZIP_CONTENT_TYPES = env.tuple('DJANGO_GZIP_CONTENT_TYPES', default=(
+        'text/css',
+        'text/javascript',
+        'application/javascript',
+        'application/x-javascript',
+        'image/svg+xml',
+        'application/pdf',
+    ))
+    AWS_DEFAULT_ACL = env('DJANGO_AWS_DEFAULT_ACL', default='public-read')
+    # AWS cache settings, don't change unless you know what you're doing:
+    AWS_EXPIRY = env.int("DJANGO_AWS_EXPIRY", default=60 * 60 * 24 * 7)
+    AWS_S3_OBJECT_PARAMETERS = {
+        'CacheControl': 'max-age={}, s-maxage={}, must-revalidate'.format(
+            AWS_EXPIRY, AWS_EXPIRY)
+    }
+
+    # Media Files (files that have been uploaded)
+    if ENVIRONMENT == 'dev':
+        DEFAULT_FILE_STORAGE = env(
+            'DJANGO_DEFAULT_FILE_STORAGE', default='django.core.files.storage.FileSystemStorage')
+        MEDIA_ROOT = env('DJANGO_MEDIA_ROOT',
+                         default=os.path.join(BASE_DIR, 'media'))
+        MEDIA_URL = env('DJANGO_MEDIA_URL', default='')
+    else:
+        DEFAULT_FILE_STORAGE = env(
+            'DJANGO_DEFAULT_FILE_STORAGE', default='storages.backends.s3boto3.S3Boto3Storage')
+        MEDIA_ROOT = env('DJANGO_MEDIA_ROOT', default='')
+        MEDIA_URL = env(
+            'DJANGO_MEDIA_URL', default='https://{}.s3.amazonaws.com/media/'.format(AWS_STORAGE_BUCKET_NAME))
+
+    # Static files (CSS, JavaScript, Images)
+    if ENVIRONMENT == 'dev':
+        STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
+        STATIC_ROOT = env('DJANGO_STATIC_ROOT',
+                          default=os.path.join(BASE_DIR, 'static'))
+        STATIC_URL = env('DJANGO_STATIC_URL', default='/static/')
+    else:
+        STATICFILES_STORAGE = env(
+            'DJANGO_STATICFILES_STORAGE', default='storages.backends.s3boto3.S3Boto3Storage')
+        STATIC_ROOT = env('DJANGO_STATIC_ROOT', default=None)
+        STATIC_URL = env(
+            'DJANGO_STATIC_URL', default='https://{}.s3.amazonaws.com/static/'.format(AWS_STORAGE_BUCKET_NAME))
+
     return vars()
