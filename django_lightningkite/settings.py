@@ -133,7 +133,7 @@ def settings(BASE_DIR=os.getcwd()):
             'DJANGO_DEFAULT_FILE_STORAGE', default='django.core.files.storage.FileSystemStorage')
         MEDIA_ROOT = env('DJANGO_MEDIA_ROOT',
                          default=os.path.join(BASE_DIR, 'media'))
-        MEDIA_URL = env('DJANGO_MEDIA_URL', default='')
+        MEDIA_URL = env('DJANGO_MEDIA_URL', default='/media/')
     else:
         DEFAULT_FILE_STORAGE = env(
             'DJANGO_DEFAULT_FILE_STORAGE', default='storages.backends.s3boto3.S3Boto3Storage')
