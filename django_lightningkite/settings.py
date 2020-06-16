@@ -108,9 +108,9 @@ def settings(BASE_DIR=os.getcwd()):
     AWS_ACCESS_KEY_ID = env('DJANGO_AWS_ACCESS_KEY_ID', default=None)
     AWS_SECRET_ACCESS_KEY = env('DJANGO_AWS_SECRET_ACCESS_KEY', default=None)
     AWS_STORAGE_BUCKET_NAME = env('DJANGO_AWS_STORAGE_BUCKET_NAME', default=None)
-    AWS_AUTO_CREATE_BUCKET = env.bool('DJANGO_AWS_AUTO_CREATE_BUCKET', True)
-    AWS_QUERYSTRING_AUTH = env.bool('DJANGO_AWS_QUERYSTRING_AUTH', False)
-    AWS_IS_GZIPPED = env.bool('DJANGO_AWS_IS_GZIPPED', True)
+    AWS_AUTO_CREATE_BUCKET = env.bool('DJANGO_AWS_AUTO_CREATE_BUCKET', default=True)
+    AWS_QUERYSTRING_AUTH = env.bool('DJANGO_AWS_QUERYSTRING_AUTH', default=False)
+    AWS_IS_GZIPPED = env.bool('DJANGO_AWS_IS_GZIPPED', default=True)
     GZIP_CONTENT_TYPES = env.tuple('DJANGO_GZIP_CONTENT_TYPES', default=(
         'text/css',
         'text/javascript',
