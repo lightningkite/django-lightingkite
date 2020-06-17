@@ -1,5 +1,8 @@
 
 
+## 0.4.4
+
+- add email validation to serializers
 
 ## 0.4.3
 

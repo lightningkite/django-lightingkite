@@ -5,6 +5,7 @@ from django.contrib.auth.password_validation import validate_password
 from django.utils.translation import ugettext_lazy as _
 
 from rest_framework import exceptions, serializers
+from rest_framework.validators import UniqueValidator
 
 UserModel = get_user_model()
 EMAIL_REQUIRED = True
@@ -23,7 +24,7 @@ def clean_password(password, user=None):
     min_length = 8
     if min_length and len(password) < min_length:
         raise forms.ValidationError(_("Password must be a minimum of {0} "
-                                        "characters.").format(min_length))
+                                      "characters.").format(min_length))
     validate_password(password, user)
     return password
 
@@ -79,13 +80,18 @@ class EmailUserLoginSerializer(serializers.Serializer):
             if app_settings.EMAIL_VERIFICATION == app_settings.EmailVerificationMethod.MANDATORY:
                 email_address = user.emailaddress_set.get(email=user.email)
                 if not email_address.verified:
-                    raise serializers.ValidationError(_('E-mail is not verified.'))
+                    raise serializers.ValidationError(
+                        _('E-mail is not verified.'))
 
         attrs['user'] = user
         return attrs
 
 
 class EmailUserDetailsSerializer(serializers.ModelSerializer):
+
+    email = serializers.EmailField(
+        validators=[UniqueValidator(queryset=UserModel.objects.all())]
+    )
 
     class Meta:
         model = UserModel
@@ -100,7 +106,10 @@ class EmailUserDetailsSerializer(serializers.ModelSerializer):
 
 
 class EmailRegisterSerializer(serializers.Serializer):
-    email = serializers.EmailField(required=EMAIL_REQUIRED)
+    email = serializers.EmailField(
+        required=EMAIL_REQUIRED,
+        validators=[UniqueValidator(queryset=UserModel.objects.all())]
+    )
     password1 = serializers.CharField(required=True, write_only=True)
     password2 = serializers.CharField(required=True, write_only=True)
 
