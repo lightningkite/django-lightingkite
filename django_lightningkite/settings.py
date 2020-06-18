@@ -111,6 +111,9 @@ def settings(BASE_DIR=os.getcwd()):
     AWS_AUTO_CREATE_BUCKET = env.bool('DJANGO_AWS_AUTO_CREATE_BUCKET', default=True)
     AWS_QUERYSTRING_AUTH = env.bool('DJANGO_AWS_QUERYSTRING_AUTH', default=False)
     AWS_IS_GZIPPED = env.bool('DJANGO_AWS_IS_GZIPPED', default=True)
+    AWS_STATIC_LOCATION = env('DJANGO_AWS_STATIC_LOCATION', default='static')
+    AWS_MEDIA_LOCATION = env('DJANGO_AWS_MEDIA_LOCATION', default='media')
+
     GZIP_CONTENT_TYPES = env.tuple('DJANGO_GZIP_CONTENT_TYPES', default=(
         'text/css',
         'text/javascript',
@@ -128,29 +131,27 @@ def settings(BASE_DIR=os.getcwd()):
     }
 
     # Media Files (files that have been uploaded)
+    MEDIA_ROOT = env('DJANGO_MEDIA_ROOT',
+                        default=os.path.join(BASE_DIR, 'media'))
     if ENVIRONMENT == 'dev':
         DEFAULT_FILE_STORAGE = env(
             'DJANGO_DEFAULT_FILE_STORAGE', default='django.core.files.storage.FileSystemStorage')
-        MEDIA_ROOT = env('DJANGO_MEDIA_ROOT',
-                         default=os.path.join(BASE_DIR, 'media'))
         MEDIA_URL = env('DJANGO_MEDIA_URL', default='/media/')
     else:
         DEFAULT_FILE_STORAGE = env(
-            'DJANGO_DEFAULT_FILE_STORAGE', default='storages.backends.s3boto3.S3Boto3Storage')
-        MEDIA_ROOT = env('DJANGO_MEDIA_ROOT', default='')
+            'DJANGO_DEFAULT_FILE_STORAGE', default='django_lightningkite.s3.MediaRootS3Storage')
         MEDIA_URL = env(
             'DJANGO_MEDIA_URL', default='https://{}.s3.amazonaws.com/media/'.format(AWS_STORAGE_BUCKET_NAME))
 
     # Static files (CSS, JavaScript, Images)
+    STATIC_ROOT = env('DJANGO_STATIC_ROOT',
+                        default=os.path.join(BASE_DIR, 'static'))
     if ENVIRONMENT == 'dev':
         STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
-        STATIC_ROOT = env('DJANGO_STATIC_ROOT',
-                          default=os.path.join(BASE_DIR, 'static'))
         STATIC_URL = env('DJANGO_STATIC_URL', default='/static/')
     else:
         STATICFILES_STORAGE = env(
-            'DJANGO_STATICFILES_STORAGE', default='storages.backends.s3boto3.S3Boto3Storage')
-        STATIC_ROOT = env('DJANGO_STATIC_ROOT', default=None)
+            'DJANGO_STATICFILES_STORAGE', default='django_lightningkite.s3.StaticRootS3Storage')
         STATIC_URL = env(
             'DJANGO_STATIC_URL', default='https://{}.s3.amazonaws.com/static/'.format(AWS_STORAGE_BUCKET_NAME))
 
