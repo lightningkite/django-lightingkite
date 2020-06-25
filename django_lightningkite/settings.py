@@ -36,8 +36,9 @@ def settings(BASE_DIR=os.getcwd()):
     ALLOWED_HOSTS = env('DJANGO_ALLOWED_HOSTS', default=['.localhost'])
 
     # Sentry
+    SENTRY_DSN = env('SENTRY_DSN') if 'SENTRY_DSN' in os.environ else env('DJANGO_SENTRY_DSN', default='')
     sentry_sdk.init(
-        dsn=env('SENTRY_DSN', default=''),
+        dsn=SENTRY_DSN,
         integrations=[DjangoIntegration()]
     )
 
@@ -156,3 +157,7 @@ def settings(BASE_DIR=os.getcwd()):
             'DJANGO_STATIC_URL', default='https://{}.s3.amazonaws.com/static/'.format(AWS_STORAGE_BUCKET_NAME))
 
     return vars()
+
+    # header configs
+    USE_X_FORWARDED_HOST = env.bool('DJANGO_USE_X_FORWARDED_HOST', default=False)
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
