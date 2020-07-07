@@ -1,4 +1,11 @@
 
+## 1.0.0
+- set twilio setting defaults to None
+- raise exception if twilio settings are missing
+- refactor notification exceptions
+(breaking)
+- filter settings results by isupper
+
 ## 0.4.6
 - support both SENTRY_DSN and DJANGO_SENTRY_DSN
 - add USE_X_FORWARDED_HOST and SECURE_PROXY_SSL_HEADER defaults
