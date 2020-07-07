@@ -156,8 +156,8 @@ def settings(BASE_DIR=os.getcwd()):
         STATIC_URL = env(
             'DJANGO_STATIC_URL', default='https://{}.s3.amazonaws.com/static/'.format(AWS_STORAGE_BUCKET_NAME))
 
-    return vars()
-
     # header configs
     USE_X_FORWARDED_HOST = env.bool('DJANGO_USE_X_FORWARDED_HOST', default=False)
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+    return {key: value for (key, value) in vars().items() if key.isupper()}
