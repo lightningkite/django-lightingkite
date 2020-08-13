@@ -1,4 +1,9 @@
 
+## 1.0.1
+- added migrations for notifications module
+- added a default app config to notifications module
+- added an admin view to notifications module 
+
 ## 1.0.0
 - set twilio setting defaults to None
 - raise exception if twilio settings are missing
