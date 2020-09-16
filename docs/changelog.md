@@ -1,3 +1,5 @@
+## 1.1.1
+- fix from email bug
 
 ## 1.1.0
 - added email_from_template and pynliner dependency
