@@ -1,4 +1,7 @@
 
+## 1.1.0
+- added email_from_template and pynliner dependency
+
 ## 1.0.1
 - added migrations for notifications module
 - added a default app config to notifications module

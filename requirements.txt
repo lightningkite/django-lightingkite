@@ -4,6 +4,7 @@ setuptools>=45.1,<46.0
 django>=2.2,<4
 django-environ==0.4.5
 sentry-sdk==0.13.0
+pynliner>=0.8.0,<1.0.0
 
 # s3
 django-storages>=1.9,<1.10
