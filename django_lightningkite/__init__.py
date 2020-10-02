@@ -1,6 +1,6 @@
 
 __title__ = 'django_lightningkite'
-__version__ = '1.1.2'
+__version__ = '1.1.3'
 __author__ = 'lightningkite'
 __license__ = 'tba'
 __copyright__ = 'Copyright 2020 lightningkite'

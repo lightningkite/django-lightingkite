@@ -1,3 +1,9 @@
+## 1.1.3
+- add test environment check
+
+## 1.1.2
+- bumped version no changes. 
+
 ## 1.1.1
 - fix from email bug
 
