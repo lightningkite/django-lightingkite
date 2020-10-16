@@ -4,11 +4,11 @@ import inspect
 
 class Notification():
 
-    def via(self, notifiable):
+    def via(self, notifiable, *args, **kwargs):
         return []
 
-    def send(self, notifiable):
-        channels = self.via(notifiable)
+    def send(self, notifiable, *args, **kwargs):
+        channels = self.via(notifiable, *args, **kwargs)
 
         for channel in channels:
             if (type(channel) is str):
@@ -20,4 +20,4 @@ class Notification():
                     raise Exception('{} channel does not exist'.format(channel))
             elif inspect.isclass(channel):
                 channel_class = channel
-            channel_class.send(notifiable, self)
+            channel_class.send(notifiable, self, *args, **kwargs)

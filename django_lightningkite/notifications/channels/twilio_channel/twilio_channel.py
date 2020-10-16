@@ -7,7 +7,7 @@ from ...signals import sending
 
 class TwilioChannel(Channel):
 
-    def send(notifiable, notification):
+    def send(notifiable, notification, *args, **kwargs):
         """
         Send the Given Notification
 
@@ -38,13 +38,13 @@ class TwilioChannel(Channel):
             settings.TWILIO_AUTH_TOKEN
         )
 
-        text_message = notification.to_sms(notifiable)
+        text_message = notification.to_sms(notifiable, *args, **kwargs)
 
         message_kwargs = text_message.get_kwargs()
 
-        if not hasattr(message_kwargs, 'from_'):
+        if message_kwargs.get('from_') is None:
             message_kwargs['from_'] = settings.TWILIO_NUMBER
-        if not hasattr(message_kwargs, 'to'):
+        if message_kwargs.get('to') is None:
             if settings.TWILIO_RECEIVE_NUMBER is None:
                 raise TwilioSettingNotDefined('TWILIO_RECEIVE_NUMBER')
             message_kwargs['to'] = settings.TWILIO_RECEIVE_NUMBER

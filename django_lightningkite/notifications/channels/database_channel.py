@@ -5,13 +5,12 @@ from ..signals import sending, sent
 
 class DatabaseChannel(Channel):
 
-    def send(notifiable, notification):
+    def send(notifiable, notification, *args, **kwargs):
         """
         Send the Given Notifiction
         """
 
-        message = notification.to_db(notifiable)
-
+        message = notification.to_db(notifiable, *args, **kwargs)
 
         if isinstance(message, models.Model):
             sending.send(sender=DatabaseChannel, notifiable=notifiable, notification=notification)

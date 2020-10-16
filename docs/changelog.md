@@ -1,3 +1,8 @@
+
+## 1.2.0
+- add args and kwargs support to notifications via and send methods. for additional information.
+- fix issue with twilio channel checking sms to and from numbers. 
+
 ## 1.1.5
 - Bump version
 

@@ -4,14 +4,15 @@ from ..signals import sending, sent
 from ..exceptions import InvalidEmailObjectException
 from .. import SUCCESS, FAILED
 
+
 class MailChannel(Channel):
 
-    def send(notifiable, notification):
+    def send(notifiable, notification, *args, **kwargs):
         """
         Send the Given Notifiction
         """
 
-        message = notification.to_mail(notifiable)
+        message = notification.to_mail(notifiable, *args, **kwargs)
 
         if not isinstance(message, EmailMessage):
             raise InvalidEmailObjectException
