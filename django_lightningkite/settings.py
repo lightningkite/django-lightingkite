@@ -37,10 +37,16 @@ def settings(BASE_DIR=os.getcwd()):
 
     # Sentry
     SENTRY_DSN = env('SENTRY_DSN') if 'SENTRY_DSN' in os.environ else env('DJANGO_SENTRY_DSN', default='')
-    sentry_sdk.init(
-        dsn=SENTRY_DSN,
-        integrations=[DjangoIntegration()]
-    )
+    SENTRY_PII = env.bool('SENTRY_PII') if 'SENTRY_PII' in os.environ else env.bool('DJANGO_SENTRY_PII', default=False)
+    SENTRY_RELEASE = env('SENTRY_RELEASE') if 'SENTRY_RELEASE' in os.environ else env('DJANGO_SENTRY_RELEASE', default='')
+    sentry_options = {
+        'dsn': SENTRY_DSN,
+        'integrations': [DjangoIntegration()],
+        'environment': ENVIRONMENT,
+        'send_default_pii': SENTRY_PII,
+        'release': SENTRY_RELEASE,
+    }
+    sentry_sdk.init(**sentry_options)
 
     # Password validation
     # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators

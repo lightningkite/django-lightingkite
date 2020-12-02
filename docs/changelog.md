@@ -1,3 +1,5 @@
+## 1.2.1
+- add environment, personal identifying info, and release info to sentry settings.
 
 ## 1.2.0
 - add args and kwargs support to notifications via and send methods. for additional information.
