@@ -140,7 +140,7 @@ def settings(BASE_DIR=os.getcwd()):
     # Media Files (files that have been uploaded)
     MEDIA_ROOT = env('DJANGO_MEDIA_ROOT',
                         default=os.path.join(BASE_DIR, 'media'))
-    if ENVIRONMENT in ['dev', 'test']:
+    if ENVIRONMENT in ['dev', 'development', 'test']:
         DEFAULT_FILE_STORAGE = env(
             'DJANGO_DEFAULT_FILE_STORAGE', default='django.core.files.storage.FileSystemStorage')
         MEDIA_URL = env('DJANGO_MEDIA_URL', default='/media/')
@@ -153,7 +153,7 @@ def settings(BASE_DIR=os.getcwd()):
     # Static files (CSS, JavaScript, Images)
     STATIC_ROOT = env('DJANGO_STATIC_ROOT',
                         default=os.path.join(BASE_DIR, 'static'))
-    if ENVIRONMENT in ['dev', 'test']:
+    if ENVIRONMENT in ['dev', 'development', 'test']:
         STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
         STATIC_URL = env('DJANGO_STATIC_URL', default='/static/')
     else:
