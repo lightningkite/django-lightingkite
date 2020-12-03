@@ -1,3 +1,6 @@
+## 1.2.2
+- add option for development environment to prevent confusion with different spellings.
+
 ## 1.2.1
 - add environment, personal identifying info, and release info to sentry settings.
 
