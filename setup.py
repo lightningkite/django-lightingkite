@@ -20,7 +20,7 @@ setup(
     install_requires=[
         "Django>=2",
         "django-environ>=0.4.5,<1.0.0",
-        "sentry-sdk>=0.13.0,<1.0.0",
+        "sentry-sdk>=0.13.0,<2.0.0",
         "pynliner>=0.8.0,<1.0.0",
     ],
     extras_require={
